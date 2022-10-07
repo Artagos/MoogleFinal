@@ -1,0 +1,53 @@
+﻿@page "/"
+
+<PageTitle>Moogle!</PageTitle>
+<body>
+    
+</body>
+<h1> 🦉Moogle!🦉</h1>
+<input type="text" name="text" class="input" @bind="query" placeholder="Introduzca su búsqueda">
+
+<button class="button" style="vertical-align:middle" @onclick="RunQuery"><span>🕵🏼</span></button>  
+
+
+@if (!string.IsNullOrWhiteSpace(result.Suggestion)) {
+    <div class="suggestion">
+        <p>¿Quisiste decir <strong><a href="#"@onclick="buscacosita" >@result.Suggestion</a></strong>?</p>
+    </div>
+}
+@if (result.Suggestion==" ") {
+    <div class="suggestion">
+        <p>No hemos encontrado nada 😓</p>
+    </div>
+}
+
+<ul class="results">
+@foreach (var item in result.Items()) {
+    <li>
+        <div class="card">
+            <p class="title">@item.Title</p>
+            <p>... @item.Snippet ...</p>
+       </div>
+            
+        
+    </li>
+}
+</ul>
+
+@code {
+    
+    private string query = "";
+    private SearchResult result = new SearchResult();
+    private void buscacosita()
+    {
+        query= @result.Suggestion;
+        RunQuery();
+    }
+
+    private void RunQuery() {
+        result = Moogle.Query(query);
+    }
+    
+
+}
+
